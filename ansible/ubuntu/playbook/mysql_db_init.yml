@@ -1,0 +1,45 @@
+---
+- name: Setup MySQL with gjp_db database and remote login
+  become: yes
+  hosts: all
+  vars:
+    # Use variables from group_vars (loaded automatically)
+    # Sensitive vars (vault_db_user, vault_db_pass) come from ~/.ansible/inventory/group_vars/ubuntu_server/vault.yml
+    # Non-sensitive vars (db_name, db_host, sql_files) come from ~/.ansible/inventory/group_vars/ubuntu_server/vars.yml
+    host: "{{ db_host }}"
+    db_user: "{{ vault_db_user }}"
+    db_pass: "{{ vault_db_pass }}"
+    db_name: "gjp_db"
+    db_sql_files: ["01-gjp-auth.sql", "01-gjp-cms.sql", "01-gjp-master.sql", "02-gjp-seed-data.sql"]
+
+  tasks:
+    - name: Create directory if it doesn't exist
+      ansible.builtin.file:
+        path: /home/ubuntu/database/mysql
+        state: directory
+        mode: '0755'
+
+    - name: Copy SQL scripts to remote host
+      ansible.builtin.copy:
+        src: "../../../../gjp-admin-api-boot/tooling/scripts/database/mysql/{{ item }}"
+        dest: "/home/ubuntu/database/mysql/{{ item }}"
+        mode: '0644'
+      loop: "{{ db_sql_files }}"
+
+    - name: Debug variables
+      debug:
+        msg: "{{ item }} = {{ lookup('vars', item) }}"
+      loop:
+        - host
+        - db_user
+        - db_pass
+
+    - name: Execute SQL Scripts
+      ansible.builtin.shell: "mysql -u {{ db_user }} -p'{{ db_pass }}' -h {{ host }} -D {{ db_name }} < /home/ubuntu/database/mysql/{{ item }}"
+      register: sql_output
+      loop: "{{ db_sql_files }}"
+
+    - name: Show SQL execution results
+      debug:
+        msg: "Output for {{ item.item }}: {{ item.stdout_lines | default(['No output']) }}"
+      loop: "{{ sql_output.results }}"

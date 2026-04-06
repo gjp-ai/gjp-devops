@@ -1,0 +1,43 @@
+- name: Create uploading folders
+  hosts: ubuntu_server
+  become: yes  # This will run the tasks with sudo privileges
+
+  vars:
+    # Sync these directories with production config in src/main/resources/application-prod.yml
+    folders:
+      - /var/www/gjp/upload/articles/cover-images
+      - /var/www/gjp/upload/articles/cover-images/deleted
+      - /var/www/gjp/upload/articles/content-images
+      - /var/www/gjp/upload/articles/content-images/deleted
+      - /var/www/gjp/upload/audios
+      - /var/www/gjp/upload/audios/deleted
+      - /var/www/gjp/upload/audios/cover-images
+      - /var/www/gjp/upload/audios/cover-images/deleted
+      - /var/www/gjp/upload/videos
+      - /var/www/gjp/upload/videos/deleted
+      - /var/www/gjp/upload/videos/cover-images
+      - /var/www/gjp/upload/videos/cover-images/deleted
+      - /var/www/gjp/upload/images
+      - /var/www/gjp/upload/images/deleted
+      - /var/www/gjp/upload/files
+      - /var/www/gjp/upload/files/deleted
+      - /var/www/gjp/upload/logos
+      - /var/www/gjp/upload/logos/deleted
+ 
+  tasks:
+    - name: Ensure parent /var/www/gjp exists
+      file:
+        path: /var/www/gjp
+        state: directory
+        mode: '0755'
+
+    - name: Create folders
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ folders }}"
+      loop_control:
+        label: "{{ item }}"
+
+

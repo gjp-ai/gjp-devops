@@ -1,0 +1,41 @@
+- name: Stop Springboot (GJP open API)
+  hosts: ubuntu_server
+  become: yes  # This will run the tasks with sudo privileges
+
+  vars:
+    # local_project_path points to repository root from this playbook directory
+    local_project_path: "{{ playbook_dir }}/../../../../gjp-open-api-boot"
+    # service name to register with systemd
+    service_name: gjp-open-api-boot
+    # JAR file name (must match the artifact built by Maven)
+    jar_file_name: gjp-open-api-boot-1.0.0.jar
+    # Remote deployment directory
+    remote_project_path: /home/ubuntu/jar
+    # Log file name
+    log_file_name: gjp-open-api-boot.log
+ 
+  tasks:
+    - name: Check if systemd service exists
+      stat:
+        path: "/etc/systemd/system/{{ service_name }}.service"
+      register: service_file
+
+    - name: Stop existing systemd service if present
+      ansible.builtin.systemd:
+        name: "{{ service_name }}"
+        state: stopped
+        enabled: no
+      when: service_file.stat.exists
+      ignore_errors: yes
+
+    - name: Kill any running java -jar for this JAR filename only (if present)
+      shell: |
+        # Find java processes whose command line contains the exact jar filename
+        # Use pgrep -f to match full command line; this avoids matching other jars
+        pids=$(pgrep -f "java .*{{ jar_file_name }}" ) || true
+        if [ -n "$pids" ]; then
+          echo "$pids" | xargs -r kill || true
+        fi
+      register: kill_cmd
+      changed_when: kill_cmd.stdout | length > 0
+      failed_when: false

@@ -1,0 +1,55 @@
+---
+- name: Check System Resources and Running Services
+  hosts: ubuntu_server
+  become: yes
+  
+  tasks:
+    - name: Get Memory Usage
+      shell: free -h
+      register: mem_usage
+      changed_when: false
+      
+    - name: Get CPU Load Average
+      shell: uptime
+      register: cpu_load
+      changed_when: false
+      
+    - name: Get Disk Usage
+      shell: df -h -x tmpfs -x devtmpfs -x efi -x squashfs
+      register: disk_usage
+      changed_when: false
+      
+    - name: Get Top 10 Processes by CPU
+      shell: ps -eo pid,user,%cpu,%mem,cmd --sort=-%cpu | head -n 11
+      register: top_cpu
+      changed_when: false
+      
+    - name: Get Top 10 Processes by Memory
+      shell: ps -eo pid,user,%cpu,%mem,cmd --sort=-%mem | head -n 11
+      register: top_mem
+      changed_when: false
+
+    - name: Show System Resources
+      debug:
+        msg: |
+          =========================================
+                   SYSTEM RESOURCE USAGE
+          =========================================
+          [ CPU Load Average & Uptime ]
+          {{ cpu_load.stdout }}
+
+          [ Memory Usage ]
+          {{ mem_usage.stdout }}
+
+          [ Disk Usage (Physical) ]
+          {{ disk_usage.stdout }}
+
+          =========================================
+                TOP 10 PROCESSES BY CPU (%)
+          =========================================
+          {{ top_cpu.stdout }}
+
+          =========================================
+               TOP 10 PROCESSES BY MEMORY (%)
+          =========================================
+          {{ top_mem.stdout }}

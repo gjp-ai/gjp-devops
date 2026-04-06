@@ -1,0 +1,15 @@
+---
+- name: Backup Upload Folders  
+  hosts: all
+  vars:
+    resources_dir_remote: /var/www/gjp/upload/
+    local_backup_dir: ~/Library/CloudStorage/OneDrive-Personal/Backup/gjp/upload/
+
+  tasks:
+    - name: Synchronize remote resources directory to local machine
+      synchronize:
+        src: "{{ resources_dir_remote }}"
+        dest: "{{ local_backup_dir }}"
+        recursive: yes
+        delete: no  # Set to 'yes' if you want to delete extraneous files from dest dirs
+        mode: pull  # Pull files from remote to local

@@ -1,0 +1,48 @@
+---
+- name: Restore MySQL Database from Local Backup
+  become: yes
+  hosts: all
+  vars:
+    db_backup_file_name: "backup_gjp_db_2026-04-04_112203.sql"
+    db_backup_local_path: "~/Library/CloudStorage/OneDrive-Personal/Backup/gjp/mysql"
+    db_backup_remote_path: "/home/ubuntu/database/mysql"
+    db_user: "{{ vault_db_user }}"
+    db_pass: "{{ vault_db_pass }}"
+    db_name:  "gjp_db"
+    
+
+  tasks:
+    - name: Ensure python3-pymysql is installed
+      apt:
+        name: python3-pymysql
+        state: present
+        update_cache: yes
+
+    - name: Create directory if it doesn't exist
+      ansible.builtin.file:
+        path: /home/ubuntu/database/mysql
+        state: directory
+        mode: '0755'
+        
+    - name: Copy backup file to remote server
+      copy:
+        src: "{{ db_backup_local_path }}/{{ db_backup_file_name }}"
+        dest: "{{ db_backup_remote_path }}/{{ db_backup_file_name }}"
+        
+    - name: Restore MySQL Database
+      mysql_db:
+        name: "{{ db_name }}"
+        state: import
+        target: "{{ db_backup_remote_path }}/{{ db_backup_file_name }}"
+        login_host: "{{db_host}}"
+        login_user: "{{db_user}}"
+        login_password: "{{db_pass}}"
+      environment:
+        PATH: /usr/local/bin:{{ ansible_facts.env.PATH }}
+      notify: Flush privileges
+
+  
+  handlers:
+    - name: Flush privileges
+      become: yes
+      command: mysql -u{{ db_user }} -p{{ db_pass }} -e "FLUSH PRIVILEGES;"
