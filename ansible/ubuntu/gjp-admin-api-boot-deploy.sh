@@ -11,6 +11,8 @@ echo "=========================================="
 # Navigate to project root (two levels up from devops/ansible)
 cd "$(dirname "$0")/../../../gjp-admin-api-boot"
 
+./tooling/scripts/util/integrate-open-api.sh
+
 # Build the project using Maven wrapper (skip tests for faster builds)
 ./mvnw clean package -DskipTests
 
