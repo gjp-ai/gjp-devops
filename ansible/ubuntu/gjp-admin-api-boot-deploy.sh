@@ -16,6 +16,8 @@ cd "$(dirname "$0")/../../../gjp-admin-api-boot"
 # Build the project using Maven wrapper (skip tests for faster builds)
 ./mvnw clean package -DskipTests
 
+echo "y" | ./tooling/scripts/util/clean-open-api.sh
+
 echo ""
 echo "=========================================="
 echo "Build complete. Deploying to ubuntu_server..."
