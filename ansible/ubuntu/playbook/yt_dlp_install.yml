@@ -1,0 +1,27 @@
+---
+- name: Install yt-dlp on Ubuntu
+  hosts: all
+  become: yes
+  gather_facts: false    # yt-dlp install needs no host facts; skipping prevents slow fact gathering
+  tasks:
+    - name: Install ffmpeg (required for merging video/audio streams)
+      apt:
+        name: ffmpeg
+        state: present
+        update_cache: yes
+
+    - name: Download yt-dlp binary from GitHub releases
+      get_url:
+        url: https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+        dest: /usr/local/bin/yt-dlp
+        mode: '0755'
+        force: yes     # Always pull latest binary on each run
+
+    - name: Verify yt-dlp installation
+      command: yt-dlp --version
+      register: yt_dlp_version
+      changed_when: false
+
+    - name: Show yt-dlp version
+      debug:
+        msg: "yt-dlp installed: {{ yt_dlp_version.stdout }}"
