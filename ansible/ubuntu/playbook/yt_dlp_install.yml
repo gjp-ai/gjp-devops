@@ -4,9 +4,13 @@
   become: yes
   gather_facts: false    # yt-dlp install needs no host facts; skipping prevents slow fact gathering
   tasks:
-    - name: Install ffmpeg (required for merging video/audio streams)
+    - name: Install yt-dlp dependencies (ffmpeg, python3, nodejs for JS runtime)
       apt:
-        name: ffmpeg
+        name:
+          - ffmpeg
+          - python3
+          - python3-pip
+          - nodejs
         state: present
         update_cache: yes
 
@@ -16,6 +20,11 @@
         dest: /usr/local/bin/yt-dlp
         mode: '0755'
         force: yes     # Always pull latest binary on each run
+
+    - name: Upgrade yt-dlp to the latest nightly build (crucial for YouTube changes)
+      command: yt-dlp --update-to nightly
+      register: yt_dlp_update
+      changed_when: "'Updated yt-dlp' in yt_dlp_update.stdout"
 
     - name: Verify yt-dlp installation
       command: yt-dlp --version
