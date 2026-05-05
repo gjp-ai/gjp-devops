@@ -1,18 +1,18 @@
-- name: Deploy Springboot (GJP Admin API)
+- name: Deploy Springboot (GJP open API)
   hosts: ubuntu_server
   become: yes  # This will run the tasks with sudo privileges
 
   vars:
     # local_project_path points to repository root from this playbook directory
-    local_project_path: "{{ playbook_dir }}/../../../../gjp-admin/gjp-admin-api-boot"
+    local_project_path: "{{ playbook_dir }}/../../../../gjp-open/gjp-open-api-boot"
     # service name to register with systemd
-    service_name: gjp-admin-api-boot
+    service_name: gjp-open-api-boot
     # JAR file name (must match the artifact built by Maven)
-    jar_file_name: gjp-admin-api-boot-1.0.0.jar
+    jar_file_name: gjp-open-api-boot-1.0.0.jar
     # Remote deployment directory
     remote_project_path: /home/ubuntu/jar
     # Log file name
-    log_file_name: gjp-admin-api-boot.log
+    log_file_name: gjp-open-api-boot.log
  
   tasks:
     - name: Ensure deployment directory exists
@@ -58,7 +58,7 @@
         mode: '0644'
         content: |
           [Unit]
-          Description=GJP Admin API Spring Boot Application
+          Description=GJP open API Spring Boot Application
           After=network.target
 
           [Service]
@@ -87,3 +87,4 @@
             state: restarted
             enabled: yes
       become: yes
+      

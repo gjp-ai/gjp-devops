@@ -8,8 +8,7 @@ set -e  # Exit on error
 # Paths
 # ---------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
-PROJECT_DIR="${WORKSPACE_DIR}/gjp-admin/gjp-admin-api-boot"
+PROJECT_DIR="${SCRIPT_DIR}/../../../gjp-admin/gjp-admin-api-boot"
 APP_YML="${PROJECT_DIR}/src/main/resources/application.yml"
 
 # ---------------------------------------------------------------------------
@@ -64,7 +63,7 @@ cd "${SCRIPT_DIR}"
 # ---------------------------------------------------------------------------
 # Step 2 – Run deployment playbook
 # ---------------------------------------------------------------------------
-ansible-playbook ./playbook/gjp-admin-api-boot-deploy.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
+ansible-playbook ./playbook/deploy-gjp-admin-api-boot.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
 
 # (trap will restore dev profile automatically on EXIT)
 set_profile_dev

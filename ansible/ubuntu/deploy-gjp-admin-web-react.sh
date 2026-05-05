@@ -15,4 +15,4 @@ npm run build
 cd "${SCRIPT_DIR}"
 
 #tail -f /var/log/nginx/error.log /var/log
-ansible-playbook ./playbook/gjp-admin-web-react-deploy.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
+ansible-playbook ./playbook/deploy-gjp-admin-web-react.yml -i ~/.ansible/inventory/hosts -l ubuntu_server

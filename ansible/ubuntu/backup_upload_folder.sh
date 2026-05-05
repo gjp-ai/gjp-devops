@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Run the upload_folder_backup playbook against the inventory group 'ubuntu_server'.
+# Run the backup_upload_folder playbook against the inventory group 'ubuntu_server'.
 # Usage: ./backup_upload_folder.sh
 # This script relies on your user Ansible inventory at ~/.ansible/inventory/hosts
 # You can override inventory with -i or set ANSIBLE_CONFIG if needed.
@@ -11,4 +11,4 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "${SCRIPT_DIR}"
 
 # Preferred: specify the playbook first, then options. Use -l to limit to group
-ansible-playbook ./playbook/upload_folder_backup.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
+ansible-playbook ./playbook/backup_upload_folder.yml -i ~/.ansible/inventory/hosts -l ubuntu_server

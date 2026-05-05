@@ -27,7 +27,7 @@ echo "=========================================="
 cd "${SCRIPT_DIR}"
 
 # Run the deployment playbook
-ansible-playbook ./playbook/gjp-open-api-boot-deploy.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
+ansible-playbook ./playbook/deploy-gjp-open-api-boot.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
 
 echo ""
 echo "=========================================="

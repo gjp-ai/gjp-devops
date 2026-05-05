@@ -13,7 +13,7 @@ echo "=========================================="
 cd "${SCRIPT_DIR}"
 
 # Run the stop playbook
-ansible-playbook ./playbook/gjp-open-api-boot-stop.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
+ansible-playbook ./playbook/stop-gjp-open-api-boot.yml -i ~/.ansible/inventory/hosts -l ubuntu_server
 
 echo ""
 echo "=========================================="
