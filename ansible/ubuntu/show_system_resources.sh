@@ -4,7 +4,8 @@
 
 set -e  # Exit on error
 
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "${SCRIPT_DIR}"
 
 export ANSIBLE_STDOUT_CALLBACK=debug
 ansible-playbook ./playbook/show_system_resources.yml -i ~/.ansible/inventory/hosts -l ubuntu_server

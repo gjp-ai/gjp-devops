@@ -8,7 +8,8 @@ set -e  # Exit on error
 # Paths
 # ---------------------------------------------------------------------------
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="${SCRIPT_DIR}/../../../gjp-admin-api-boot"
+WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+PROJECT_DIR="${WORKSPACE_DIR}/gjp-admin/gjp-admin-api-boot"
 APP_YML="${PROJECT_DIR}/src/main/resources/application.yml"
 
 # ---------------------------------------------------------------------------

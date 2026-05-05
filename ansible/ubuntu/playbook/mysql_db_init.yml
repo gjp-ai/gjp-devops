@@ -21,7 +21,7 @@
 
     - name: Copy SQL scripts to remote host
       ansible.builtin.copy:
-        src: "../../../../gjp-admin-api-boot/tooling/scripts/database/mysql/{{ item }}"
+        src: "{{ playbook_dir }}/../../../../gjp-admin/gjp-admin-api-boot/tooling/scripts/database/mysql/{{ item }}"
         dest: "/home/ubuntu/database/mysql/{{ item }}"
         mode: '0644'
       loop: "{{ db_sql_files }}"

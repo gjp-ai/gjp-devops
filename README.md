@@ -6,13 +6,13 @@ This repository contains the Ansible playbooks and shell script wrappers for dep
 
 ```text
 ansible/ubuntu/
-├── gjp-admin-api-boot-deploy.sh   # Build and deploy Admin API
-├── gjp-open-api-boot-deploy.sh    # Build and deploy Open API
-├── gjp-open-api-boot-stop.sh      # Stop Open API service
+├── deploy-gjp-admin-api-boot.sh   # Build and deploy Admin API
+├── deploy-gjp-open-api-boot.sh    # Build and deploy Open API
+├── stop-gjp-open-api-boot.sh      # Stop Open API service
 ├── show_system_resources.sh       # Check CPU, Memory, and Disk usage
 ├── ping.sh                        # Test connection to the server
-├── mysql_db_*.sh                  # Database management (Backup, Create, Init, Restore)
-├── upload_folder_*.sh             # CMS folder management (Backup, Create)
+├── *_mysql_db.sh                  # Database management (Backup, Create, Init, Restore)
+├── *_upload_folder.sh             # CMS folder management (Backup, Create)
 └── playbook/                      # Ansible .yml playbooks
 ```
 
@@ -30,9 +30,9 @@ To build a fresh JAR locally and deploy it to the server:
 
 ```bash
 cd ansible/ubuntu
-./gjp-admin-api-boot-deploy.sh
+./deploy-gjp-admin-api-boot.sh
 # OR
-./gjp-open-api-boot-deploy.sh
+./deploy-gjp-open-api-boot.sh
 ```
 
 ### 2. Service Management
@@ -40,7 +40,7 @@ cd ansible/ubuntu
 To stop a running service without a full rebuild:
 
 ```bash
-./gjp-open-api-boot-stop.sh
+./stop-gjp-open-api-boot.sh
 ```
 
 ### 3. Monitoring
@@ -55,17 +55,17 @@ To view a live summary of CPU, Memory, and Disk usage on the remote server:
 
 | Script | description |
 | :--- | :--- |
-| `./mysql_db_create.sh` | Create the target database if it doesn't exist |
-| `./mysql_db_init.sh` | Initialize the database schema with SQL scripts |
-| `./mysql_db_backup.sh` | Export a `.sql` dump of the remote database to your local machine |
-| `./mysql_db_restore.sh` | Restore a local `.sql` dump to the remote server |
+| `./create_mysql_db.sh` | Create the target database if it doesn't exist |
+| `./init_mysql_db.sh` | Initialize the database schema with SQL scripts |
+| `./backup_mysql_db.sh` | Export a `.sql` dump of the remote database to your local machine |
+| `./restore_mysql_db.sh` | Restore a local `.sql` dump to the remote server |
 
 ### 5. CMS Uploads Management
 
 | Script | description |
 | :--- | :--- |
-| `./upload_folder_create.sh` | Initialize all required CMS upload subdirectories |
-| `./upload_folder_backup.sh` | Create a compressed backup of the remote upload folder |
+| `./create_upload_folder.sh` | Initialize all required CMS upload subdirectories |
+| `./backup_upload_folder.sh` | Create a compressed backup of the remote upload folder |
 
 ---
 

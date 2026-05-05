@@ -4,7 +4,7 @@
 
   vars:
     # local_project_path points to repository root from this playbook directory
-    local_project_path: "{{ playbook_dir }}/../../../../gjp-admin-api-boot"
+    local_project_path: "{{ playbook_dir }}/../../../../gjp-admin/gjp-admin-api-boot"
     # service name to register with systemd
     service_name: gjp-admin-api-boot
     # JAR file name (must match the artifact built by Maven)
@@ -87,4 +87,3 @@
             state: restarted
             enabled: yes
       become: yes
-      
