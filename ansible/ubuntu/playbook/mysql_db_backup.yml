@@ -3,7 +3,7 @@
   hosts: all
   vars:
     backup_dir_remote: /home/ubuntu/database/mysql
-    local_backup_dir: ~/Library/CloudStorage/OneDrive-Personal/Backup/gjp/mysql
+    local_backup_dir: ~/Library/CloudStorage/OneDrive-Personal/GJP-AI/Backup/gjp/mysql
     db_user: "{{ vault_db_user }}"
     db_pass: "{{ vault_db_pass }}"
     db_name: "gjp_db"

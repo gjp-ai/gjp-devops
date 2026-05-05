@@ -3,7 +3,7 @@
   hosts: all
   vars:
     resources_dir_remote: /var/www/gjp/upload/
-    local_backup_dir: ~/Library/CloudStorage/OneDrive-Personal/Backup/gjp/upload/
+    local_backup_dir: ~/Library/CloudStorage/OneDrive-Personal/GJP-AI/Backup/gjp/upload/
 
   tasks:
     - name: Synchronize remote resources directory to local machine

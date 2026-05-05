@@ -4,7 +4,7 @@
   hosts: all
   vars:
     db_backup_file_name: "backup_gjp_db_2026-04-04_112203.sql"
-    db_backup_local_path: "~/Library/CloudStorage/OneDrive-Personal/Backup/gjp/mysql"
+    db_backup_local_path: "~/Library/CloudStorage/OneDrive-Personal/GJP-AI/Backup/gjp/mysql"
     db_backup_remote_path: "/home/ubuntu/database/mysql"
     db_user: "{{ vault_db_user }}"
     db_pass: "{{ vault_db_pass }}"
