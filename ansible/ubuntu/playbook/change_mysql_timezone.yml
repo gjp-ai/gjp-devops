@@ -1,0 +1,53 @@
+---
+- name: Change MySQL timezone to Asia/Singapore
+  become: yes
+  hosts: all
+  vars:
+    # Use vault variables from inventory (loaded automatically)
+    db_user: "{{ vault_db_user }}"
+    db_pass: "{{ vault_db_pass }}"
+    timezone: "Asia/Singapore"
+
+  tasks:
+    - name: Ensure python3-pymysql is installed
+      ansible.builtin.apt:
+        name: python3-pymysql
+        state: present
+        update_cache: yes
+
+    - name: Set system timezone to {{ timezone }}
+      community.general.timezone:
+        name: "{{ timezone }}"
+
+    - name: Load timezone info into MySQL system tables
+      ansible.builtin.shell: |
+        mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u {{ db_user }} -p'{{ db_pass }}' mysql
+      args:
+        executable: /bin/bash
+      register: tz_load_result
+      changed_when: tz_load_result.rc == 0
+      failed_when: tz_load_result.rc != 0
+
+    - name: Configure MySQL default timezone in mysqld.cnf
+      ansible.builtin.lineinfile:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: '^default-time-zone'
+        line: "default-time-zone = '{{ timezone }}'"
+        insertafter: '^\[mysqld\]'
+        state: present
+      notify: restart mysql
+
+    - name: Set global time_zone dynamically
+      community.mysql.mysql_variables:
+        variable: time_zone
+        value: "{{ timezone }}"
+        login_user: "{{ db_user }}"
+        login_password: "{{ db_pass }}"
+        mode: global
+      ignore_errors: yes
+
+  handlers:
+    - name: restart mysql
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
