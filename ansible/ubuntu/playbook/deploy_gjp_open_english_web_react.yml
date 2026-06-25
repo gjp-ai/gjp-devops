@@ -1,0 +1,23 @@
+- name: Deploy GJP English Web React App to Ubuntu Server & restart Nginx
+  hosts: all
+  become: yes
+      
+  tasks:
+    - name: Create gjp-english directory
+      file:
+        path: /var/www/gjp/english  # Change this path to your desired directory
+        state: directory
+        mode: '0755'
+
+    - name: Upload build to /var/www/gjp/english
+      copy:
+        src: "../../../../gjp-open/gjp-open-english-web-react/dist/"
+        dest: "/var/www/gjp/english"
+        mode: 0755
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted

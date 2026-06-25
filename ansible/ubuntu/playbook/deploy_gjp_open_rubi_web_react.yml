@@ -1,0 +1,23 @@
+- name: Deploy Rubi Web React App to Ubuntu Server & restart Nginx
+  hosts: all
+  become: yes
+      
+  tasks:
+    - name: Create gjp-rubi directory
+      file:
+        path: /var/www/gjp/rubi  # Change this path to your desired directory
+        state: directory
+        mode: '0755'
+
+    - name: Upload build to /var/www/gjp/rubi
+      copy:
+        src: "../../../../gjp-open/gjp-open-rubi-web-react/dist/"
+        dest: "/var/www/gjp/rubi"
+        mode: 0755
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
